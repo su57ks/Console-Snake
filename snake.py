@@ -1,26 +1,23 @@
+from time import time
+from random import choice
+
+play_time = time()
+
 def draw(positions_dict):
-    print("\n"*100)
-    print(positions_dict)
     positions = positions_dict.values()
     lines = {}
     for y in range(13):
-        #print("console", y)
         line = ""
-        #print(" ", line)
         for x in range(15):
-            #print("~console", x)
             find = False
             for position in positions:
-                #print("~#console", position)
                 if position[0] == x and position[1] == y:
-                    line += "██"
+                    line += "\033[38;2;255;0;0m██\033[m"
                     find = True
             if find is False:
-                line += "░░"
-                #print("~#console", line)
+                line += "\033[38;2;255;255;0m░░\033[m"
         
         lines[y] = line
-        #print("console", lines)
     for i in range(13):
         print(lines[i])
 
@@ -39,6 +36,16 @@ def out(position):
 
     return position
 
+def free(positions_dict):
+    positions = list(positions_dict.values())
+    print(positions)
+    free = []
+    for y in range(13):
+        for x in range(15):
+            if [x, y] not in positions:
+                free.append([x, y])
+    return free
+
 def calculate(positions, command):
     new_positions = {}
     nums = sorted(positions.keys())
@@ -56,20 +63,37 @@ def calculate(positions, command):
     new_positions[mx] = upgr_last
 
     for num in nums:
+        if positions[num] == upgr_last:
+            return "death"
         if num == mx:
             continue
         new_positions[num] = positions[num + 1]
         
     return new_positions
 
-positions = {-1: [0, 1], 0: [1, 1], 1:[2, 1], 2: [3, 1]}
+positions = {-1: [1, 6], 0: [2, 6], 1:[3, 6], 2: [4, 6], 3: [5, 6]}
 while True:
+    print("Play time:", round(time() - play_time, 2), "seconds")
+
     draw(positions)
 
-    command = input()
+    command = input().lower()
 
     if command == "exit":
+        print(":(")
         break
+    elif command not in ["w", "a", "s", "d"]:
+        print("\n"*100)
+        print("unknown command:", command)
+        continue
+
+    command = command[0]
 
     new_positions =  calculate(positions, command)
+    if new_positions == "death":
+        print("you died(")
+        break
+    #new_positions[-2] = choice(free(new_positions))
+        
     positions = new_positions
+    print("\n"*100)
