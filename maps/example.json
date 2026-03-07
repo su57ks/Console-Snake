@@ -1,0 +1,23 @@
+{
+  "name": "Map of Soul society",
+  "description": "Hado №90: Kuroshtsugi!",
+  "author": "Aizen Sosuke",
+  "size": [3, 1],
+  "structure": [
+    {
+      "coords": [0, 0],
+      "empty": true,
+      "color": [240, 240, 240]
+    },
+    {
+      "coords": [1, 0],
+      "empty": false,
+      "color": [100, 100, 100]
+    },
+    {
+      "coords": [2, 0],
+      "empty": true,
+      "color": [240, 240, 240]
+    }
+  ]
+}
