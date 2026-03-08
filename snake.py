@@ -4,6 +4,9 @@ import keyboard
 import threading
 import os
 
+XSIZE = 15
+YSIZE = 13
+
 play_time = time()
 
 def w():
@@ -43,9 +46,9 @@ def dict2str(dct):
 def draw(positions_dict):
     positions = positions_dict.values()
     lines = {}
-    for y in range(13):
+    for y in range(YSIZE):
         line = ""
-        for x in range(15):
+        for x in range(XSIZE):
             find = False
             for position in positions:
                 if position[0] == x and position[1] == y:
@@ -57,20 +60,20 @@ def draw(positions_dict):
         lines[y] = line
 
     print(dict2str(lines))
-    #for i in range(13):
+    #for i in range(YSIZE):
     #    print(lines[i])
 
 def out(position):
-    if 15 > position[0] > -1 and 13 > position[1] > -1:
+    if XSIZE > position[0] > -1 and YSIZE > position[1] > -1:
         return position
     if position[0] == -1:
         position[0] = 14
-    elif position[0] == 15:
+    elif position[0] == XSIZE:
         position[0] = 0
 
     if position[1] == -1:
         position[1] = 12
-    elif position[1] == 13:
+    elif position[1] == YSIZE:
         position[1] = 0
 
     return position
@@ -79,8 +82,8 @@ def free(positions_dict):
     positions = list(positions_dict.values())
     print(positions)
     free = []
-    for y in range(13):
-        for x in range(15):
+    for y in range(YSIZE):
+        for x in range(XSIZE):
             if [x, y] not in positions:
                 free.append([x, y])
     return free
