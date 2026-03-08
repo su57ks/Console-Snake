@@ -26,6 +26,20 @@ def close():
     print("Good luck!")
     os._exit(0)
 
+def lst2str(lst):
+    string = ""
+    for elem in lst:
+        string = string + elem + "\n"
+
+    return string[:-1]
+
+def dict2str(dct):
+    string = ""
+    for i in range(len(dct.keys()) - 1):
+        string = string + dct[i] + "\n"
+
+    return string[:-1]
+
 def draw(positions_dict):
     positions = positions_dict.values()
     lines = {}
@@ -41,8 +55,10 @@ def draw(positions_dict):
                 line += "\033[38;2;255;255;0m░░\033[m"
         
         lines[y] = line
-    for i in range(13):
-        print(lines[i])
+
+    print(dict2str(lines))
+    #for i in range(13):
+    #    print(lines[i])
 
 def out(position):
     if 15 > position[0] > -1 and 13 > position[1] > -1:
