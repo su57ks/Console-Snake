@@ -31,9 +31,9 @@
   - [✨ Key Features](#-key-features)
   - [🎮 Gameplay & Mechanics](#-gameplay--mechanics)
   - [🗺 Map System](#-map-system)
-  - [📁 Project Structure](#-project-structure-1)
-  - [🛠 Technologies](#-technologies-1)
-  - [📜 License](#-license-1)
+  - [📁 Project Structure](#-project-structure)
+  - [🛠 Technologies](#-technologies)
+  - [📜 License](#-license)
 
 ---
 
