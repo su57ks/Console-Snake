@@ -1,3 +1,7 @@
+Отлично! Вот исправленный README с добавленным разделом 📊 Достоинства и недостатки, а также с небольшими дополнениями:
+
+---
+
 # 🐍 Консольная Змейка / Console Snake
 
 <div align="center">
@@ -6,6 +10,7 @@
 ![License](https://img.shields.io/badge/лицензия-GPLv3-blue.svg?style=for-the-badge&labelColor=black)
 ![Python](https://img.shields.io/badge/Python-3.x-3776AB.svg?style=for-the-badge&labelColor=black&logo=python)
 ![Console](https://img.shields.io/badge/платформа-консоль-black.svg?style=for-the-badge&labelColor=black)
+![Dependencies](https://img.shields.io/badge/зависимости-1-important.svg?style=for-the-badge&labelColor=black)
 
 **✨ Классическая игра "Змейка" с расширенными возможностями: цветной интерфейс, пользовательские карты и система телепортации через стены ✨**
 
@@ -21,6 +26,7 @@
   - [✨ Ключевые возможности](#-ключевые-возможности)
   - [🎮 Геймплей и механики](#-геймплей-и-механики)
   - [🗺 Система карт](#-система-карт)
+  - [📊 Достоинства и недостатки](#-достоинства-и-недостатки)
   - [📁 Структура проекта](#-структура-проекта)
   - [🛠 Технологии](#-технологии)
   - [📜 Лицензия](#-лицензия)
@@ -31,6 +37,7 @@
   - [✨ Key Features](#-key-features)
   - [🎮 Gameplay & Mechanics](#-gameplay--mechanics)
   - [🗺 Map System](#-map-system)
+  - [📊 Advantages and Disadvantages](#-advantages-and-disadvantages)
   - [📁 Project Structure](#-project-structure)
   - [🛠 Technologies](#-technologies)
   - [📜 License](#-license)
@@ -76,6 +83,8 @@ python snake.py
 ### 📝 Описание проекта
 **Console Snake** — это классическая игра "Змейка", реализованная полностью в терминале с необычными механиками. Вместо стандартных стен змейка телепортируется при выходе за границы поля, а карты хранятся в формате JSON, что позволяет создавать собственные уровни с уникальными цветовыми схемами.
 
+Проект написан "руками" без использования сложных игровых движков — только чистый Python и минимум зависимостей.
+
 ---
 
 ### ✨ Ключевые возможности
@@ -91,6 +100,7 @@ python snake.py
 | | RGB-цвета | Каждая клетка может иметь свой цвет |
 | | Система препятствий | Возможность создавать непроходимые стены |
 | ⚡ **Техническое** | Многопоточность | Отдельный поток для ожидания клавиш |
+| | Минимум зависимостей | Всего 1 сторонняя библиотека |
 
 ---
 
@@ -157,6 +167,30 @@ python snake.py
 | `coords` | array | Координаты [x, y] |
 | `empty` | bool | `true` — проходимо, `false` — стена |
 | `color` | array | RGB-цвет [r, g, b] |
+
+---
+
+### 📊 Достоинства и недостатки
+
+#### ✅ Достоинства
+| | |
+|---|------|
+| **👨‍💻 Написано человеком** | Весь код написан вручную, без использования готовых шаблонов и игровых движков — чувствуется живой подход |
+| **📦 Мало зависимостей** | Всего 1 сторонняя библиотека (`keyboard`). Всё остальное — чистый Python |
+| **🎨 Цветной интерфейс** | Полноцветный вывод в терминале с поддержкой 24-битных RGB-цветов |
+| **🧩 Расширяемость** | Легко добавлять новые карты через JSON, менять размеры поля |
+| **🔄 Телепортация** | Нестандартная механика вместо скучных стен |
+| **⚡ Многопоточность** | Отзывчивое управление благодаря отдельному потоку для клавиш |
+
+#### ❌ Недостатки
+| | |
+|---|------|
+| **🖥 Нет нормального UI** | Всё происходит в консоли — нет графического интерфейса, только символы |
+| **🍎 Проблемы с permissions** | На macOS и Linux библиотека `keyboard` требует прав суперпользователя |
+| **🍔 Отсутствует еда** | Механика сбора еды пока не реализована — змейка просто растёт в длину при старте |
+| **📏 Фиксированный размер** | Размер поля задаётся константами, нельзя изменить во время игры |
+| **🚫 Нет счёта** | Отсутствует система подсчёта очков и рекордов |
+| **🐌 Нет ускорения** | Скорость движения постоянная, не увеличивается с ростом змейки |
 
 ---
 
@@ -254,6 +288,8 @@ python snake.py
 ### 📝 Project Description
 **Console Snake** is a classic Snake game implemented entirely in the terminal with unusual mechanics. Instead of standard walls, the snake teleports when going beyond the field boundaries, and maps are stored in JSON format, allowing you to create custom levels with unique color schemes.
 
+The project is "hand-coded" without complex game engines — just pure Python and minimal dependencies.
+
 ---
 
 ### ✨ Key Features
@@ -269,6 +305,7 @@ python snake.py
 | | RGB colors | Each cell can have its own color |
 | | Obstacle system | Ability to create impassable walls |
 | ⚡ **Technical** | Multithreading | Separate thread for key waiting |
+| | Minimal dependencies | Only 1 third-party library |
 
 ---
 
@@ -326,6 +363,30 @@ python snake.py
 | `coords` | array | Coordinates [x, y] |
 | `empty` | bool | `true` — passable, `false` — wall |
 | `color` | array | RGB color [r, g, b] |
+
+---
+
+### 📊 Advantages and Disadvantages
+
+#### ✅ Advantages
+| | |
+|---|------|
+| **👨‍💻 Hand-coded** | All code is written manually, without ready-made templates or game engines — a personal touch is evident |
+| **📦 Minimal dependencies** | Only 1 third-party library (`keyboard`). Everything else is pure Python |
+| **🎨 Colored interface** | Full-color terminal output with 24-bit RGB support |
+| **🧩 Extensibility** | Easy to add new maps via JSON, change field sizes |
+| **🔄 Teleportation** | Non-standard mechanic instead of boring walls |
+| **⚡ Multithreading** | Responsive controls thanks to separate thread for keys |
+
+#### ❌ Disadvantages
+| | |
+|---|------|
+| **🖥 No proper UI** | Everything happens in the console — no graphical interface, only symbols |
+| **🍎 Permission issues** | On macOS and Linux, the `keyboard` library requires superuser rights |
+| **🍔 No food mechanic** | Food collection is not implemented yet — the snake just has a fixed starting length |
+| **📏 Fixed size** | Field size is set by constants, cannot be changed during gameplay |
+| **🚫 No score system** | No point tracking or high scores |
+| **🐌 No speed increase** | Movement speed is constant, doesn't increase as the snake grows |
 
 ---
 
