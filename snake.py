@@ -1,7 +1,38 @@
 from time import time
 from random import choice
+import keyboard
+import threading
+import sys
 
 play_time = time()
+
+def w():
+    global pos
+    calculate(pos, "w")
+    global hotkey_pressed
+    hotkey_pressed.set()
+    hotkey_pressed = threading.Event()
+
+def a():
+    global pos
+    calculate(pos, "a")
+    global hotkey_pressed
+    hotkey_pressed.set()
+    hotkey_pressed = threading.Event()
+
+def s():
+    global pos
+    calculate(pos, "s")
+    global hotkey_pressed
+    hotkey_pressed.set()
+    hotkey_pressed = threading.Event()
+
+def d():
+    global pos
+    calculate(pos, "d")
+    global hotkey_pressed
+    hotkey_pressed.set()
+    hotkey_pressed = threading.Event()
 
 def draw(positions_dict):
     positions = positions_dict.values()
@@ -68,32 +99,23 @@ def calculate(positions, command):
         if num == mx:
             continue
         new_positions[num] = positions[num + 1]
-        
-    return new_positions
 
-positions = {-1: [1, 6], 0: [2, 6], 1:[3, 6], 2: [4, 6], 3: [5, 6]}
+    print("\n"*100)
+        
+    draw(new_positions)
+    global pos
+    pos = new_positions
+
+pos = {-1: [1, 6], 0: [2, 6], 1:[3, 6], 2: [4, 6], 3: [5, 6]}
+
+keyboard.add_hotkey('w', w)
+keyboard.add_hotkey('a', a)
+keyboard.add_hotkey('s', s)
+keyboard.add_hotkey('d', d)
+
 while True:
     print("Play time:", round(time() - play_time, 2), "seconds")
 
-    draw(positions)
+    hotkey_pressed = threading.Event()
 
-    command = input().lower()
-
-    if command == "exit":
-        print(":(")
-        break
-    elif command not in ["w", "a", "s", "d"]:
-        print("\n"*100)
-        print("unknown command:", command)
-        continue
-
-    command = command[0]
-
-    new_positions =  calculate(positions, command)
-    if new_positions == "death":
-        print("you died(")
-        break
-    #new_positions[-2] = choice(free(new_positions))
-        
-    positions = new_positions
-    print("\n"*100)
+    hotkey_pressed.wait()
