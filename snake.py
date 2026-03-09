@@ -3,11 +3,21 @@ from random import choice
 import keyboard
 import threading
 import os
+import codecs
+import json
 
 XSIZE = 15
 YSIZE = 13
 
 play_time = time()
+
+def clear():
+    with codecs.open("user.json", "r", "utf_8_sig") as f:
+        user = json.load(f)
+        if user["enviroment"] == "console":
+            os.system('cls' if os.name == 'nt' else 'clear')
+        else:
+            print("\n" * 100)
 
 def w_move():
     calculate("w")
@@ -74,7 +84,6 @@ def out(position):
 
 def free(positions_dict):
     positions = list(positions_dict.values())
-    print(positions)
     free = []
     for y in range(YSIZE):
         for x in range(XSIZE):
@@ -110,7 +119,7 @@ def calculate(command):
             continue
         new_positions[num] = positions[num + 1]
 
-    print("\n"*100)
+    clear()
         
     draw(new_positions)
     global play_time
