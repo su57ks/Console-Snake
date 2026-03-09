@@ -10,20 +10,16 @@ YSIZE = 13
 play_time = time()
 
 def w_move():
-    global pos
-    calculate(pos, "w")
+    calculate("w")
 
 def a_move():
-    global pos
-    calculate(pos, "a")
+    calculate("a")
 
 def s_move():
-    global pos
-    calculate(pos, "s")
+    calculate("s")
 
 def d_move():
-    global pos
-    calculate(pos, "d")
+    calculate("d")
 
 def close():
     print("Good luck!")
@@ -86,7 +82,8 @@ def free(positions_dict):
                 free.append([x, y])
     return free
 
-def calculate(positions, command):
+def calculate(command):
+    global positions
     global hotkey_pressed
     hotkey_pressed.set()
     hotkey_pressed = threading.Event()
@@ -118,10 +115,9 @@ def calculate(positions, command):
     draw(new_positions)
     global play_time
     print("Play time:", round(time() - play_time, 2), "seconds")
-    global pos
-    pos = new_positions
+    positions = new_positions
 
-pos = {-1: [1, 6], 0: [2, 6], 1:[3, 6], 2: [4, 6], 3: [5, 6]}
+positions = {-1: [1, 6], 0: [2, 6], 1:[3, 6], 2: [4, 6], 3: [5, 6]}
 
 keyboard.add_hotkey('w', w_move)
 keyboard.add_hotkey('a', a_move)
