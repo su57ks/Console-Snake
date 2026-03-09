@@ -1,7 +1,3 @@
-Отлично! Обновил README с учётом изменений в коде и добавил якорь для навигации в раздел разработчиков:
-
----
-
 # 🐍 Консольная Змейка / Console Snake
 
 <div align="center">
@@ -11,6 +7,7 @@
 ![Python](https://img.shields.io/badge/Python-3.x-3776AB.svg?style=for-the-badge&labelColor=black&logo=python)
 ![Console](https://img.shields.io/badge/платформа-консоль-black.svg?style=for-the-badge&labelColor=black)
 ![Dependencies](https://img.shields.io/badge/зависимости-2-important.svg?style=for-the-badge&labelColor=black)
+![Human written](https://img.shields.io/badge/написано-человеком-ff69b4.svg?style=for-the-badge&labelColor=black)
 
 **✨ Классическая игра "Змейка" с цветным интерфейсом, телепортацией и пользовательскими картами ✨**
 
@@ -97,7 +94,7 @@ python snake.py
 ### 📝 Описание проекта
 **Console Snake** — это классическая игра "Змейка", реализованная полностью в терминале. Особенность проекта — телепортация при выходе за границы поля вместо стандартных стен, цветное отображение и поддержка пользовательских карт в формате JSON.
 
-Проект написан "руками" без использования сложных игровых движков — только чистый Python и минимум зависимостей.
+Проект написан вручную, без использования искусственного интеллекта — только чистый Python, минимум зависимостей и человеческий подход к каждой строчке кода.
 
 ---
 
@@ -192,7 +189,8 @@ python snake.py
 #### ✅ Достоинства
 | | |
 |---|------|
-| **👨‍💻 Написано человеком** | Весь код написан вручную, без использования готовых шаблонов и игровых движков — чувствуется живой подход |
+| **✍️ Написано человеком** | **Самое главное** — код написан вручную, без использования ChatGPT и других ИИ. Каждая строчка продумана и написана своими руками |
+| **👨‍💻 Живой код** | Весь код написан без готовых шаблонов и игровых движков — чувствуется человеческий подход |
 | **📦 Мало зависимостей** | Всего 1 сторонняя библиотека (`keyboard`). Всё остальное — чистый Python |
 | **🎨 Цветной интерфейс** | Полноцветный вывод в терминале с поддержкой 24-битных RGB-цветов |
 | **🧩 Расширяемость** | Легко добавлять новые карты через JSON |
@@ -528,7 +526,7 @@ python snake.py
 ### 📝 Project Description
 **Console Snake** is a classic Snake game implemented entirely in the terminal. The project features teleportation when leaving the field boundaries instead of standard walls, colored display, and support for user-created maps in JSON format.
 
-The project is "hand-coded" without complex game engines — just pure Python and minimal dependencies.
+The project is hand-written, without using artificial intelligence — just pure Python, minimal dependencies, and a human approach to every line of code.
 
 ---
 
@@ -614,7 +612,8 @@ The project is "hand-coded" without complex game engines — just pure Python an
 #### ✅ Advantages
 | | |
 |---|------|
-| **👨‍💻 Hand-coded** | All code is written manually, without ready-made templates or game engines — a personal touch is evident |
+| **✍️ Human-written** | **The most important thing** — the code is written manually, without using ChatGPT or other AI. Every line is thought through and written by hand |
+| **👨‍💻 Live code** | All code is written without ready-made templates or game engines — a human approach is evident |
 | **📦 Minimal dependencies** | Only 1 third-party library (`keyboard`). Everything else is pure Python |
 | **🎨 Colored interface** | Full-color terminal output with 24-bit RGB support |
 | **🧩 Extensibility** | Easy to add new maps via JSON |
