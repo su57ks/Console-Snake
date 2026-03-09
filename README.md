@@ -1,3 +1,7 @@
+Отлично! Обновил README с учётом изменений в коде и добавил якорь для навигации в раздел разработчиков:
+
+---
+
 # 🐍 Консольная Змейка / Console Snake
 
 <div align="center">
@@ -6,7 +10,7 @@
 ![License](https://img.shields.io/badge/лицензия-GPLv3-blue.svg?style=for-the-badge&labelColor=black)
 ![Python](https://img.shields.io/badge/Python-3.x-3776AB.svg?style=for-the-badge&labelColor=black&logo=python)
 ![Console](https://img.shields.io/badge/платформа-консоль-black.svg?style=for-the-badge&labelColor=black)
-![Dependencies](https://img.shields.io/badge/зависимости-1-important.svg?style=for-the-badge&labelColor=black)
+![Dependencies](https://img.shields.io/badge/зависимости-2-important.svg?style=for-the-badge&labelColor=black)
 
 **✨ Классическая игра "Змейка" с цветным интерфейсом, телепортацией и пользовательскими картами ✨**
 
@@ -31,6 +35,7 @@
 - [🛠 Технологии](#-технологии)
 - [👨‍💻 Для разработчиков](#-для-разработчиков)
   - [Функции snake.py](#-функции-snakepy)
+  - [Конфигурация user.json](#-конфигурация-userjson)
   - [Как добавить карту](#-как-добавить-карту)
   - [Планы по развитию](#-планы-по-развитию)
 - [📜 Лицензия](#-лицензия)
@@ -52,6 +57,7 @@
 - [🛠 Technologies](#-technologies)
 - [👨‍💻 For Developers](#-for-developers)
   - [snake.py Functions](#-snakepy-functions)
+  - [user.json Configuration](#-userjson-configuration)
   - [How to Add a Map](#-how-to-add-a-map)
   - [Development Plans](#-development-plans)
 - [📜 License](#-license)
@@ -81,7 +87,7 @@ python snake.py
 
 #### Требования
 - Python 3.x
-- Библиотека `keyboard` (для обработки нажатий клавиш)
+- Библиотеки: `keyboard`, `codecs`, `json` (встроенные)
 - Терминал с поддержкой ANSI-цветов (все современные терминалы)
 
 > **Важно:** На macOS и Linux для работы `keyboard` могут потребоваться права суперпользователя. Альтернативно можно использовать `sudo python snake.py`.
@@ -108,6 +114,7 @@ python snake.py
 | | RGB-цвета | Каждая клетка может иметь свой цвет |
 | | Система препятствий | Возможность создавать непроходимые стены |
 | ⚡ **Техническое** | Многопоточность | Отдельный поток для ожидания клавиш |
+| | Умная очистка | Адаптивная очистка экрана под среду выполнения |
 | | Минимум зависимостей | Всего 1 сторонняя библиотека |
 
 ---
@@ -191,6 +198,7 @@ python snake.py
 | **🧩 Расширяемость** | Легко добавлять новые карты через JSON |
 | **🔄 Телепортация** | Нестандартная механика вместо скучных стен |
 | **⚡ Многопоточность** | Отзывчивое управление благодаря отдельному потоку для клавиш |
+| **🔄 Умная очистка** | Адаптируется под среду выполнения (консоль/IDE) |
 
 #### ❌ Недостатки
 | | |
@@ -209,6 +217,7 @@ python snake.py
 ```
 📦 Console-Snake
 ├── 📄 snake.py                          # Основной файл игры
+├── 📄 user.json                         # Конфигурация пользователя
 ├── 📁 maps/                              # Папка с картами
 │   └── 📄 example.json                    # Пример карты
 ├── 📄 README.md                          # Документация
@@ -225,7 +234,8 @@ python snake.py
 | **keyboard** | Глобальный перехват нажатий клавиш |
 | **threading** | Асинхронное ожидание ввода |
 | **ANSI escape codes** | Цветной вывод в терминал |
-| **JSON** | Хранение и загрузка карт |
+| **JSON** | Хранение карт и конфигурации |
+| **codecs** | Чтение файлов с UTF-8 BOM |
 
 ---
 
@@ -235,6 +245,7 @@ python snake.py
 
 | Функция | Назначение | Параметры | Возвращаемое значение |
 |---------|------------|-----------|----------------------|
+| `clear()` | Очищает экран в зависимости от среды | Нет | `None` |
 | `w_move()`, `a_move()`, `s_move()`, `d_move()` | Функции-обёртки для вызова `calculate()` с соответствующим направлением | Нет | `None` |
 | `close()` | Завершает игру с сообщением "Good luck!" | Нет | `None` (завершает процесс) |
 | `lst2str(lst)` | Преобразует список строк в одну строку с переносами | `lst`: список строк | `string`: объединённая строка |
@@ -245,6 +256,29 @@ python snake.py
 | `calculate(command)` | Основная функция движения и логики | `command`: строка "w", "a", "s", "d" | `None` (обновляет глобальные переменные) |
 
 #### Детальный разбор ключевых функций
+
+**clear()** — адаптивная очистка экрана
+```python
+def clear():
+    with codecs.open("user.json", "r", "utf_8_sig") as f:
+        user = json.load(f)
+        if user["enviroment"] == "console":
+            os.system('cls' if os.name == 'nt' else 'clear')
+        else:
+            print("\n" * 100)
+```
+**Что делает:**
+- Читает файл `user.json` с поддержкой UTF-8 BOM
+- Проверяет значение `enviroment`
+- Если `"console"` — использует системную команду очистки
+- Иначе — печатает 100 пустых строк
+
+**Особенности:**
+- Поддержка Windows (`cls`) и Unix (`clear`)
+- Адаптация под разные среды (консоль, IDE, онлайн-редакторы)
+- Использование `codecs` для корректного чтения файлов с BOM
+
+---
 
 **calculate(command)** — сердце игры
 ```python
@@ -279,10 +313,10 @@ def calculate(command):
             continue
         new_positions[num] = positions[num + 1]  # Сегмент двигается за предыдущим
 
-    print("\n"*100)                          # Очистка экрана
-    draw(new_positions)                       # Отрисовка
+    clear()                                    # Очистка экрана
+    draw(new_positions)                         # Отрисовка
     print("Play time:", round(time() - play_time, 2), "seconds")
-    positions = new_positions                  # Обновление глобальной переменной
+    positions = new_positions                    # Обновление глобальной переменной
 ```
 **Что делает:**
 - Получает команду движения
@@ -290,6 +324,7 @@ def calculate(command):
 - Применяет телепортацию через `out()`
 - Проверяет столкновение с телом
 - Перемещает все сегменты
+- Очищает экран через `clear()`
 - Перерисовывает поле
 - Обновляет таймер
 
@@ -364,7 +399,6 @@ def out(position):
 ```python
 def free(positions_dict):
     positions = list(positions_dict.values())
-    print(positions)
     free = []
     for y in range(YSIZE):
         for x in range(XSIZE):
@@ -379,7 +413,24 @@ def free(positions_dict):
 
 **Особенности:**
 - Функция заготовлена для будущей механики еды
-- Сейчас только выводит занятые позиции в консоль
+- Убрана лишняя печать `positions`
+
+---
+
+### ⚙️ Конфигурация user.json
+
+```json
+{"enviroment": "special"}
+```
+
+| Поле | Значение | Описание |
+|------|----------|----------|
+| `enviroment` | `"console"` | Для системной очистки экрана |
+| | `"special"` | Для очистки через 100 пустых строк |
+
+**Как это работает:**
+- `"console"` — использует `os.system('cls'/'clear')` (для настоящего терминала)
+- `"special"` — использует `print("\n" * 100)` (для IDE и онлайн-сред)
 
 ---
 
@@ -420,6 +471,7 @@ def free(positions_dict):
 - [ ] Увеличение скорости с ростом змейки
 - [ ] Загрузка случайной карты при старте
 - [ ] Сохранение прогресса
+- [ ] Поддержка разных цветовых схем через `user.json`
 
 ---
 
@@ -468,7 +520,7 @@ python snake.py
 
 #### Requirements
 - Python 3.x
-- `keyboard` library
+- Libraries: `keyboard`, `codecs`, `json` (built-in)
 - Terminal with ANSI color support
 
 ---
@@ -493,6 +545,7 @@ The project is "hand-coded" without complex game engines — just pure Python an
 | | RGB colors | Each cell can have its own color |
 | | Obstacle system | Ability to create impassable walls |
 | ⚡ **Technical** | Multithreading | Separate thread for key waiting |
+| | Smart clearing | Adaptive screen clearing for different environments |
 | | Minimal dependencies | Only 1 third-party library |
 
 ---
@@ -567,6 +620,7 @@ The project is "hand-coded" without complex game engines — just pure Python an
 | **🧩 Extensibility** | Easy to add new maps via JSON |
 | **🔄 Teleportation** | Non-standard mechanic instead of boring walls |
 | **⚡ Multithreading** | Responsive controls thanks to separate thread for keys |
+| **🔄 Smart clearing** | Adapts to execution environment (console/IDE) |
 
 #### ❌ Disadvantages
 | | |
@@ -585,6 +639,7 @@ The project is "hand-coded" without complex game engines — just pure Python an
 ```
 📦 Console-Snake
 ├── 📄 snake.py                          # Main game file
+├── 📄 user.json                         # User configuration
 ├── 📁 maps/                              # Maps folder
 │   └── 📄 example.json                    # Example map
 ├── 📄 README.md                          # Documentation
@@ -601,7 +656,8 @@ The project is "hand-coded" without complex game engines — just pure Python an
 | **keyboard** | Global key press interception |
 | **threading** | Asynchronous input waiting |
 | **ANSI escape codes** | Colored terminal output |
-| **JSON** | Map storage and loading |
+| **JSON** | Map storage and configuration |
+| **codecs** | Reading UTF-8 BOM files |
 
 ---
 
@@ -611,6 +667,7 @@ The project is "hand-coded" without complex game engines — just pure Python an
 
 | Function | Purpose | Parameters | Return Value |
 |---------|------------|-----------|----------------------|
+| `clear()` | Clears screen based on environment | None | `None` |
 | `w_move()`, `a_move()`, `s_move()`, `d_move()` | Wrapper functions to call `calculate()` with corresponding direction | None | `None` |
 | `close()` | Exits the game with "Good luck!" message | None | `None` (terminates process) |
 | `lst2str(lst)` | Converts a list of strings into one string with line breaks | `lst`: list of strings | `string`: joined string |
@@ -621,6 +678,29 @@ The project is "hand-coded" without complex game engines — just pure Python an
 | `calculate(command)` | Main movement and logic function | `command`: string "w", "a", "s", "d" | `None` (updates global variables) |
 
 #### Detailed Analysis of Key Functions
+
+**clear()** — adaptive screen clearing
+```python
+def clear():
+    with codecs.open("user.json", "r", "utf_8_sig") as f:
+        user = json.load(f)
+        if user["enviroment"] == "console":
+            os.system('cls' if os.name == 'nt' else 'clear')
+        else:
+            print("\n" * 100)
+```
+**What it does:**
+- Reads `user.json` with UTF-8 BOM support
+- Checks `enviroment` value
+- If `"console"` — uses system clear command
+- Otherwise — prints 100 empty lines
+
+**Features:**
+- Windows (`cls`) and Unix (`clear`) support
+- Adapts to different environments (console, IDE, online editors)
+- Uses `codecs` for proper BOM file reading
+
+---
 
 **calculate(command)** — the heart of the game
 ```python
@@ -655,10 +735,10 @@ def calculate(command):
             continue
         new_positions[num] = positions[num + 1]  # Segment follows previous
 
-    print("\n"*100)                          # Clear screen
-    draw(new_positions)                       # Draw
+    clear()                                    # Clear screen
+    draw(new_positions)                         # Draw
     print("Play time:", round(time() - play_time, 2), "seconds")
-    positions = new_positions                  # Update global variable
+    positions = new_positions                    # Update global variable
 ```
 **What it does:**
 - Gets movement command
@@ -666,6 +746,7 @@ def calculate(command):
 - Applies teleportation via `out()`
 - Checks collision with body
 - Moves all segments
+- Clears screen via `clear()`
 - Redraws field
 - Updates timer
 
@@ -740,7 +821,6 @@ def out(position):
 ```python
 def free(positions_dict):
     positions = list(positions_dict.values())
-    print(positions)
     free = []
     for y in range(YSIZE):
         for x in range(XSIZE):
@@ -755,7 +835,24 @@ def free(positions_dict):
 
 **Features:**
 - Prepared for future food mechanics
-- Currently only prints occupied positions to console
+- Removed unnecessary `print(positions)`
+
+---
+
+### ⚙️ user.json Configuration
+
+```json
+{"enviroment": "special"}
+```
+
+| Field | Value | Description |
+|-------|-------|-------------|
+| `enviroment` | `"console"` | For system screen clearing |
+| | `"special"` | For clearing via 100 empty lines |
+
+**How it works:**
+- `"console"` — uses `os.system('cls'/'clear')` (for real terminal)
+- `"special"` — uses `print("\n" * 100)` (for IDEs and online environments)
 
 ---
 
@@ -796,6 +893,7 @@ def free(positions_dict):
 - [ ] Speed increase as snake grows
 - [ ] Load random map on start
 - [ ] Progress saving
+- [ ] Support for different color schemes via `user.json`
 
 ---
 
