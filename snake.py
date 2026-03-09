@@ -9,19 +9,19 @@ YSIZE = 13
 
 play_time = time()
 
-def w():
+def w_move():
     global pos
     calculate(pos, "w")
 
-def a():
+def a_move():
     global pos
     calculate(pos, "a")
 
-def s():
+def s_move():
     global pos
     calculate(pos, "s")
 
-def d():
+def d_move():
     global pos
     calculate(pos, "d")
 
@@ -38,7 +38,7 @@ def lst2str(lst):
 
 def dict2str(dct):
     string = ""
-    for i in range(len(dct.keys()) - 1):
+    for i in range(len(dct.keys())):
         string = string + dct[i] + "\n"
 
     return string[:-1]
@@ -60,19 +60,17 @@ def draw(positions_dict):
         lines[y] = line
 
     print(dict2str(lines))
-    #for i in range(YSIZE):
-    #    print(lines[i])
 
 def out(position):
     if XSIZE > position[0] > -1 and YSIZE > position[1] > -1:
         return position
     if position[0] == -1:
-        position[0] = 14
+        position[0] = XSIZE - 1
     elif position[0] == XSIZE:
         position[0] = 0
 
     if position[1] == -1:
-        position[1] = 12
+        position[1] = YSIZE - 1
     elif position[1] == YSIZE:
         position[1] = 0
 
@@ -95,13 +93,13 @@ def calculate(positions, command):
     new_positions = {}
     nums = sorted(positions.keys())
     mx = max(nums)
-    if command.lower() == "w":
+    if command == "w":
         last = [positions[mx][0], positions[mx][1] - 1]
-    elif command.lower() == "d":
+    elif command == "d":
         last = [positions[mx][0] + 1, positions[mx][1]]
-    elif command.lower() == "s":
+    elif command == "s":
         last = [positions[mx][0], positions[mx][1] + 1]
-    elif command.lower() == "a":
+    elif command == "a":
         last = [positions[mx][0] - 1, positions[mx][1]]
 
     upgr_last = out(last)
@@ -118,20 +116,20 @@ def calculate(positions, command):
     print("\n"*100)
         
     draw(new_positions)
+    global play_time
+    print("Play time:", round(time() - play_time, 2), "seconds")
     global pos
     pos = new_positions
 
 pos = {-1: [1, 6], 0: [2, 6], 1:[3, 6], 2: [4, 6], 3: [5, 6]}
 
-keyboard.add_hotkey('w', w)
-keyboard.add_hotkey('a', a)
-keyboard.add_hotkey('s', s)
-keyboard.add_hotkey('d', d)
+keyboard.add_hotkey('w', w_move)
+keyboard.add_hotkey('a', a_move)
+keyboard.add_hotkey('s', s_move)
+keyboard.add_hotkey('d', d_move)
 keyboard.add_hotkey('ctrl+c', close)
 
 while True:
-    print("Play time:", round(time() - play_time, 2), "seconds")
-
     hotkey_pressed = threading.Event()
 
     hotkey_pressed.wait()
