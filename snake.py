@@ -116,7 +116,7 @@ def calculate(command):
     new_positions[mx] = upgr_last
 
     for num in nums:
-        if positions[num] == upgr_last:
+        if positions[num] == upgr_last or map["structure"][f"{upgr_last[0]}:{upgr_last[1]}"]["empty"] == False:
             print("You died :(")
             close()
         if num == mx:

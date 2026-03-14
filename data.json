@@ -5,7 +5,7 @@
   "author": "@su57ks",
   "size": [15, 13],
   "structure": {
-    "0:0": {"coords": [0, 0], "empty": true, "color": [255, 255, 255]},
+    "0:0": {"coords": [0, 0], "empty": true, "color": [255, 255, 0]},
     "1:0": {"coords": [1, 0], "empty": true, "color": [255, 255, 0]},
     "2:0": {"coords": [2, 0], "empty": true, "color": [255, 255, 0]},
     "3:0": {"coords": [3, 0], "empty": true, "color": [255, 255, 0]},
