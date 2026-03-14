@@ -11,8 +11,8 @@ YSIZE = 13
 
 play_time = time()
 
-with codecs.open("default.json", "r", "utf_8_sig") as f:
-    map = json.load(f)
+with codecs.open("data.json", "r", "utf_8_sig") as f:
+    map = json.load(f)["maps"]["default"]
 
 def clear():
     with codecs.open("user.json", "r", "utf_8_sig") as f:
