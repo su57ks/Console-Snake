@@ -6,10 +6,12 @@
 ![License](https://img.shields.io/badge/лицензия-GPLv3-blue.svg?style=for-the-badge&labelColor=black)
 ![Python](https://img.shields.io/badge/Python-3.x-3776AB.svg?style=for-the-badge&labelColor=black&logo=python)
 ![Console](https://img.shields.io/badge/платформа-консоль-black.svg?style=for-the-badge&labelColor=black)
-![Dependencies](https://img.shields.io/badge/зависимости-2-important.svg?style=for-the-badge&labelColor=black)
+![Dependencies](https://img.shields.io/badge/зависимости-1-important.svg?style=for-the-badge&labelColor=black)
 ![Human written](https://img.shields.io/badge/написано-человеком-ff69b4.svg?style=for-the-badge&labelColor=black)
 
 **✨ Классическая игра "Змейка" с цветным интерфейсом, телепортацией и пользовательскими картами ✨**
+
+[![Info Site](https://img.shields.io/badge/инфо_сайт-Snake--info-9cf?style=for-the-badge)](https://su57ks.github.io/Snake-info/)
 
 </div>
 
@@ -32,8 +34,8 @@
 - [🛠 Технологии](#-технологии)
 - [👨‍💻 Для разработчиков](#-для-разработчиков)
   - [Функции snake.py](#-функции-snakepy)
+  - [Формат data.json](#-формат-datajson)
   - [Конфигурация user.json](#-конфигурация-userjson)
-  - [Как добавить карту](#-как-добавить-карту)
   - [Планы по развитию](#-планы-по-развитию)
 - [📜 Лицензия](#-лицензия)
 
@@ -54,8 +56,8 @@
 - [🛠 Technologies](#-technologies)
 - [👨‍💻 For Developers](#-for-developers)
   - [snake.py Functions](#-snakepy-functions)
+  - [data.json Format](#-datajson-format)
   - [user.json Configuration](#-userjson-configuration)
-  - [How to Add a Map](#-how-to-add-a-map)
   - [Development Plans](#-development-plans)
 - [📜 License](#-license)
 
@@ -75,7 +77,7 @@ git clone https://github.com/su57ks/Console-Snake.git
 # Перейдите в папку проекта
 cd Console-Snake
 
-# Установите зависимости
+# Установите единственную зависимость
 pip install keyboard
 
 # Запустите игру
@@ -84,7 +86,7 @@ python snake.py
 
 #### Требования
 - Python 3.x
-- Библиотеки: `keyboard`, `codecs`, `json` (встроенные)
+- Библиотека: `keyboard` (единственная зависимость)
 - Терминал с поддержкой ANSI-цветов (все современные терминалы)
 
 > **Важно:** На macOS и Linux для работы `keyboard` могут потребоваться права суперпользователя. Альтернативно можно использовать `sudo python snake.py`.
@@ -92,9 +94,11 @@ python snake.py
 ---
 
 ### 📝 Описание проекта
-**Console Snake** — это классическая игра "Змейка", реализованная полностью в терминале. Особенность проекта — телепортация при выходе за границы поля вместо стандартных стен, цветное отображение и поддержка пользовательских карт в формате JSON.
+**Console Snake** — это классическая игра "Змейка", реализованная полностью в терминале. Особенность проекта — телепортация при выходе за границы поля вместо стандартных стен, цветное отображение и полноценная поддержка пользовательских карт в формате JSON (теперь карты полностью интегрированы в геймплей!).
 
 Проект написан вручную, без использования искусственного интеллекта — только чистый Python, минимум зависимостей и человеческий подход к каждой строчке кода.
+
+🔗 **[Информационный сайт игры](https://su57ks.github.io/Snake-info/)** — более подробно и наглядно
 
 ---
 
@@ -105,14 +109,16 @@ python snake.py
 | 🎮 **Геймплей** | Управление WASD | Интуитивное управление с горячими клавишами |
 | | Телепортация | При выходе за границы поля змейка появляется с противоположной стороны |
 | | Таймер игры | Отображается время текущей сессии |
-| 🎨 **Визуал** | Цветная графика | Змейка — красные блоки (`██`), поле — жёлтые (`░░`) |
-| | Поддержка ANSI | 24-битные цвета в терминале |
+| | Препятствия на карте | Стены, которые убивают змейку при столкновении |
+| 🎨 **Визуал** | Цветная графика | Змейка — красные блоки (`██`), поле — настраиваемые цвета из карты |
+| | Поддержка ANSI | 24-битные цвета в терминале, каждый блок может иметь свой RGB-цвет |
 | 🗺 **Карты** | JSON-формат | Простое создание и редактирование уровней |
+| | Полная интеграция | Карты теперь влияют на геймплей (цвета поля и стены) |
 | | RGB-цвета | Каждая клетка может иметь свой цвет |
-| | Система препятствий | Возможность создавать непроходимые стены |
+| | Система препятствий | Возможность создавать непроходимые стены (`empty: false`) |
 | ⚡ **Техническое** | Многопоточность | Отдельный поток для ожидания клавиш |
 | | Умная очистка | Адаптивная очистка экрана под среду выполнения |
-| | Минимум зависимостей | Всего 1 сторонняя библиотека |
+| | **Минимум зависимостей** | Всего **1** сторонняя библиотека (`keyboard`) |
 
 ---
 
@@ -131,40 +137,41 @@ python snake.py
 1. Змейка движется в выбранном направлении
 2. При выходе за границу поля она появляется с противоположной стороны (телепортация)
 3. Столкновение с собственным хвостом приводит к смерти
-4. Время игры отображается после каждого хода
+4. **Столкновение со стеной** (клетка с `"empty": false`) также приводит к смерти
+5. Время игры отображается после каждого хода
 
 #### Отображение в терминале
 ```
 Змейка (█):
-\033[38;2;255;0;0m██\033[m — красные блоки
+\033[38;2;255;0;0m██\033[m — красные блоки (цвет фиксированный)
 
 Поле (░):
-\033[38;2;255;255;0m░░\033[m — жёлтые блоки
+цвет берётся из data.json для каждой клетки
 ```
 
 ---
 
 ### 🗺 Система карт
 
-#### Формат JSON
+#### Главный файл карт: `data.json`
+Игра загружает карту из `data.json` при запуске. Формат полностью обновлён и теперь использует объект для быстрого доступа к клеткам.
+
 ```json
 {
-  "name": "Example Map",
-  "description": "Map description",
-  "author": "Author Name",
-  "size": [3, 1],
-  "structure": [
-    {
-      "coords": [0, 0],
-      "empty": true,
-      "color": [240, 240, 240]
-    },
-    {
-      "coords": [1, 0],
-      "empty": false,
-      "color": [100, 100, 100]
+  "maps": {
+    "default": {
+      "name": "Default map",
+      "description": "обычная карта",
+      "author": "@su57ks",
+      "size": [15, 13],
+      "structure": {
+        "0:0": {"coords": [0, 0], "empty": true, "color": [255, 255, 0]},
+        "1:0": {"coords": [1, 0], "empty": true, "color": [255, 255, 0]},
+        ...
+        "14:12": {"coords": [14, 12], "empty": true, "color": [255, 255, 0]}
+      }
     }
-  ]
+  }
 }
 ```
 
@@ -175,12 +182,12 @@ python snake.py
 | `description` | string | Описание уровня |
 | `author` | string | Создатель карты |
 | `size` | array | Размеры [x, y] |
-| `structure` | array | Массив клеток |
+| `structure` | object | Объект клеток с ключами `"x:y"` |
 | `coords` | array | Координаты [x, y] |
-| `empty` | bool | `true` — проходимо, `false` — стена |
-| `color` | array | RGB-цвет [r, g, b] |
+| `empty` | bool | `true` — проходимо, `false` — стена (смерть) |
+| `color` | array | RGB-цвет [r, g, b] для отрисовки клетки |
 
-> **Примечание:** Система карт находится в разработке и пока не интегрирована в основной геймплей.
+> **Важно:** Теперь карты **полностью интегрированы**! Цвет поля берётся из `data.json`, а стены (`empty: false`) убивают змейку.
 
 ---
 
@@ -190,10 +197,9 @@ python snake.py
 | | |
 |---|------|
 | **✍️ Написано человеком** | **Самое главное** — код написан вручную, без использования ChatGPT и других ИИ. Каждая строчка продумана и написана своими руками |
-| **👨‍💻 Живой код** | Весь код написан без готовых шаблонов и игровых движков — чувствуется человеческий подход |
-| **📦 Мало зависимостей** | Всего 1 сторонняя библиотека (`keyboard`). Всё остальное — чистый Python |
-| **🎨 Цветной интерфейс** | Полноцветный вывод в терминале с поддержкой 24-битных RGB-цветов |
-| **🧩 Расширяемость** | Легко добавлять новые карты через JSON |
+| **📦 Минимум зависимостей** | Всего **1** сторонняя библиотека (`keyboard`). Всё остальное — чистый Python |
+| **🎨 Цветной интерфейс** | Полноцветный вывод в терминале с поддержкой 24-битных RGB-цветов для каждой клетки |
+| **🗺 Полная поддержка карт** | Карты полностью интегрированы: влияют на цвета и создают стены |
 | **🔄 Телепортация** | Нестандартная механика вместо скучных стен |
 | **⚡ Многопоточность** | Отзывчивое управление благодаря отдельному потоку для клавиш |
 | **🔄 Умная очистка** | Адаптируется под среду выполнения (консоль/IDE) |
@@ -206,7 +212,7 @@ python snake.py
 | **🍔 Отсутствует еда** | Механика сбора еды пока не реализована — змейка имеет фиксированную начальную длину |
 | **🚫 Нет счёта** | Отсутствует система подсчёта очков и рекордов |
 | **🐌 Нет ускорения** | Скорость движения постоянная, не увеличивается |
-| **🗺 Карты не в игре** | JSON-карты существуют, но пока не влияют на геймплей |
+| **📁 Одна карта** | Пока загружается только `default` карта, без выбора |
 
 ---
 
@@ -215,12 +221,13 @@ python snake.py
 ```
 📦 Console-Snake
 ├── 📄 snake.py                          # Основной файл игры
+├── 📄 data.json                         # Файл с картой (теперь здесь)
 ├── 📄 user.json                         # Конфигурация пользователя
-├── 📁 maps/                              # Папка с картами
-│   └── 📄 example.json                    # Пример карты
 ├── 📄 README.md                          # Документация
 └── 📄 LICENSE                            # Лицензия GPLv3
 ```
+
+> **Примечание:** Папка `maps/` больше не используется — все карты хранятся в `data.json`.
 
 ---
 
@@ -229,10 +236,10 @@ python snake.py
 | Технология | Применение |
 |------------|------------|
 | **Python 3** | Основная логика игры |
-| **keyboard** | Глобальный перехват нажатий клавиш |
+| **keyboard** | Глобальный перехват нажатий клавиш (единственная зависимость) |
 | **threading** | Асинхронное ожидание ввода |
 | **ANSI escape codes** | Цветной вывод в терминал |
-| **JSON** | Хранение карт и конфигурации |
+| **JSON** | Хранение карты и конфигурации |
 | **codecs** | Чтение файлов с UTF-8 BOM |
 
 ---
@@ -244,96 +251,27 @@ python snake.py
 | Функция | Назначение | Параметры | Возвращаемое значение |
 |---------|------------|-----------|----------------------|
 | `clear()` | Очищает экран в зависимости от среды | Нет | `None` |
-| `w_move()`, `a_move()`, `s_move()`, `d_move()` | Функции-обёртки для вызова `calculate()` с соответствующим направлением | Нет | `None` |
+| `w_move()`, `a_move()`, `s_move()`, `d_move()` | Функции-обёртки для вызова `calculate()` | Нет | `None` |
 | `close()` | Завершает игру с сообщением "Good luck!" | Нет | `None` (завершает процесс) |
-| `lst2str(lst)` | Преобразует список строк в одну строку с переносами | `lst`: список строк | `string`: объединённая строка |
-| `dict2str(dct)` | Преобразует словарь строк в одну строку с переносами | `dct`: словарь с индексами 0..n | `string`: объединённая строка |
-| `draw(positions_dict)` | Отрисовывает игровое поле | `positions_dict`: словарь с координатами змейки | `None` (выводит в консоль) |
+| `lst2str(lst)` | Преобразует список строк в одну строку | `lst`: список строк | `string`: объединённая строка |
+| `dict2str(dct)` | Преобразует словарь строк в одну строку | `dct`: словарь с индексами 0..n | `string`: объединённая строка |
+| `draw(positions_dict)` | Отрисовывает игровое поле | `positions_dict`: координаты змейки | `None` (выводит в консоль) |
 | `out(position)` | Обрабатывает выход за границы поля (телепортация) | `position`: список [x, y] | `position`: скорректированные координаты |
-| `free(positions_dict)` | Находит свободные клетки на поле | `positions_dict`: словарь с координатами змейки | `free`: список свободных клеток |
-| `calculate(command)` | Основная функция движения и логики | `command`: строка "w", "a", "s", "d" | `None` (обновляет глобальные переменные) |
+| `free(positions_dict)` | Находит свободные клетки на поле | `positions_dict`: координаты змейки | `free`: список свободных клеток |
+| `calculate(command)` | Основная функция движения и логики | `command`: "w", "a", "s", "d" | `None` (обновляет глобальные переменные) |
 
 #### Детальный разбор ключевых функций
 
-**clear()** — адаптивная очистка экрана
+**Загрузка карты при старте**
 ```python
-def clear():
-    with codecs.open("user.json", "r", "utf_8_sig") as f:
-        user = json.load(f)
-        if user["enviroment"] == "console":
-            os.system('cls' if os.name == 'nt' else 'clear')
-        else:
-            print("\n" * 100)
+with codecs.open("data.json", "r", "utf_8_sig") as f:
+    map = json.load(f)["maps"]["default"]
 ```
-**Что делает:**
-- Читает файл `user.json` с поддержкой UTF-8 BOM
-- Проверяет значение `enviroment`
-- Если `"console"` — использует системную команду очистки
-- Иначе — печатает 100 пустых строк
-
-**Особенности:**
-- Поддержка Windows (`cls`) и Unix (`clear`)
-- Адаптация под разные среды (консоль, IDE, онлайн-редакторы)
-- Использование `codecs` для корректного чтения файлов с BOM
+Теперь карта загружается из `data.json` один раз при запуске и доступна глобально.
 
 ---
 
-**calculate(command)** — сердце игры
-```python
-def calculate(command):
-    global positions
-    global hotkey_pressed
-    hotkey_pressed.set()                    # Сигнал о нажатии клавиши
-    hotkey_pressed = threading.Event()      # Сброс события
-    new_positions = {}
-    nums = sorted(positions.keys())          # [-1, 0, 1, 2, 3]
-    mx = max(nums)                           # 3 (индекс головы)
-    
-    # Вычисление новой позиции головы в зависимости от направления
-    if command == "w":
-        last = [positions[mx][0], positions[mx][1] - 1]
-    elif command == "d":
-        last = [positions[mx][0] + 1, positions[mx][1]]
-    elif command == "s":
-        last = [positions[mx][0], positions[mx][1] + 1]
-    elif command == "a":
-        last = [positions[mx][0] - 1, positions[mx][1]]
-
-    upgr_last = out(last)                    # Телепортация если нужно
-    new_positions[mx] = upgr_last            # Новая голова
-
-    # Проверка на столкновение и перемещение остальных сегментов
-    for num in nums:
-        if positions[num] == upgr_last:      # Если голова врезалась в тело
-            print("You died :(")
-            close()
-        if num == mx:
-            continue
-        new_positions[num] = positions[num + 1]  # Сегмент двигается за предыдущим
-
-    clear()                                    # Очистка экрана
-    draw(new_positions)                         # Отрисовка
-    print("Play time:", round(time() - play_time, 2), "seconds")
-    positions = new_positions                    # Обновление глобальной переменной
-```
-**Что делает:**
-- Получает команду движения
-- Вычисляет новую позицию головы
-- Применяет телепортацию через `out()`
-- Проверяет столкновение с телом
-- Перемещает все сегменты
-- Очищает экран через `clear()`
-- Перерисовывает поле
-- Обновляет таймер
-
-**Особенности:**
-- Ключ `-1` в словаре `positions` — технический элемент для будущих механик
-- Змейка хранится как `{индекс: [x, y]}`, где больший индекс — голова
-- Телепортация применяется только к голове
-
----
-
-**draw(positions_dict)** — отрисовка поля
+**draw(positions_dict)** — отрисовка поля (обновлена)
 ```python
 def draw(positions_dict):
     positions = positions_dict.values()
@@ -347,71 +285,68 @@ def draw(positions_dict):
                     line += "\033[38;2;255;0;0m██\033[m"  # Красная змейка
                     find = True
             if find is False:
-                line += "\033[38;2;255;255;0m░░\033[m"    # Жёлтое поле
+                color = map["structure"][f"{x}:{y}"]["color"]  # Цвет из карты!
+                line += f"\033[38;2;{color[0]};{color[1]};{color[2]}m░░\033[m"
         lines[y] = line
     print(dict2str(lines))
 ```
-**Что делает:**
-- Проходит по всем клеткам поля
-- Проверяет, есть ли в клетке сегмент змейки
-- Если есть — рисует красный блок
-- Если нет — рисует жёлтый блок
-- Форматирует вывод через `dict2str()`
-
-**Особенности:**
-- Двойной цикл по Y и X
-- Использует ANSI-коды для 24-битного цвета
-- Каждый вызов полностью перерисовывает поле
+**Что нового:**
+- Цвет поля теперь берётся из `data.json` для каждой клетки
+- Поддержка 24-битных RGB-цветов
 
 ---
 
-**out(position)** — телепортация
+**calculate(command)** — проверка стен
 ```python
-def out(position):
-    if XSIZE > position[0] > -1 and YSIZE > position[1] > -1:
-        return position
-    if position[0] == -1:
-        position[0] = XSIZE - 1
-    elif position[0] == XSIZE:
-        position[0] = 0
-    if position[1] == -1:
-        position[1] = YSIZE - 1
-    elif position[1] == YSIZE:
-        position[1] = 0
-    return position
-```
-**Что делает:**
-- Проверяет, находится ли точка в пределах поля
-- Если вышла за левый край — появляется справа
-- Если вышла за правый край — появляется слева
-- Если вышла за верхний край — появляется снизу
-- Если вышла за нижний край — появляется сверху
+def calculate(command):
+    # ... вычисление новой позиции ...
+    upgr_last = out(last)
+    new_positions[mx] = upgr_last
 
-**Особенности:**
-- Создаёт эффект "тора" (игровое поле замкнуто в кольцо)
-- Применяется только к голове змейки
+    for num in nums:
+        # Проверка на столкновение с телом ИЛИ со стеной!
+        if positions[num] == upgr_last or map["structure"][f"{upgr_last[0]}:{upgr_last[1]}"]["empty"] == False:
+            print("You died :(")
+            close()
+        if num == mx:
+            continue
+        new_positions[num] = positions[num + 1]
+    # ...
+```
+**Что нового:**
+- Добавлена проверка на столкновение со стеной (`"empty": false`)
+- Смерть при попадании на такую клетку
 
 ---
 
-**free(positions_dict)** — поиск свободных клеток
-```python
-def free(positions_dict):
-    positions = list(positions_dict.values())
-    free = []
-    for y in range(YSIZE):
-        for x in range(XSIZE):
-            if [x, y] not in positions:
-                free.append([x, y])
-    return free
-```
-**Что делает:**
-- Получает все занятые клетки
-- Проходит по всему полю
-- Если клетка не занята — добавляет в список свободных
+### 🗺 Формат data.json
 
-**Особенности:**
-- Функция заготовлена для будущей механики еды
-- Убрана лишняя печать `positions`
+Теперь игра использует единый файл `data.json` для хранения карты:
+
+```json
+{
+  "maps": {
+    "default": {
+      "name": "Default map",
+      "description": "обычная карта",
+      "author": "@su57ks",
+      "size": [15, 13],
+      "structure": {
+        "0:0": {"coords": [0, 0], "empty": true, "color": [255, 255, 0]},
+        "0:1": {"coords": [0, 1], "empty": true, "color": [255, 255, 0]},
+        ...
+      }
+    }
+  }
+}
+```
+
+**Как создать свою карту:**
+1. Скопируйте структуру `default`
+2. Измените `name`, `description`, `author`
+3. Задайте нужные цвета для каждой клетки (RGB)
+4. Установите `"empty": false` для клеток-стен
+5. Сохраните в `data.json`
 
 ---
 
@@ -423,51 +358,18 @@ def free(positions_dict):
 
 | Поле | Значение | Описание |
 |------|----------|----------|
-| `enviroment` | `"console"` | Для системной очистки экрана |
-| | `"special"` | Для очистки через 100 пустых строк |
-
-**Как это работает:**
-- `"console"` — использует `os.system('cls'/'clear')` (для настоящего терминала)
-- `"special"` — использует `print("\n" * 100)` (для IDE и онлайн-сред)
-
----
-
-### 🗺 Как добавить карту
-
-1. Создайте JSON-файл в папке `/maps`
-2. Заполните структуру по примеру `example.json`:
-
-```json
-{
-  "name": "Название карты",
-  "description": "Описание",
-  "author": "Ваше имя",
-  "size": [ширина, высота],
-  "structure": [
-    {
-      "coords": [x, y],
-      "empty": true/false,
-      "color": [r, g, b]
-    }
-  ]
-}
-```
-
-3. Координаты должны быть в пределах `size`
-4. `empty: false` создаёт непроходимую стену
-5. Цвет задаётся в формате RGB (0-255)
-
-> **Важно:** Интеграция карт в игру находится в разработке
+| `enviroment` | `"console"` | Для системной очистки экрана (`cls`/`clear`) |
+| | `"special"` | Для очистки через 100 пустых строк (для IDE) |
 
 ---
 
 ### 🚀 Планы по развитию
 
+- [x] **Полная интеграция JSON-карт** (цвета и стены)
 - [ ] Добавить механику еды и роста змейки
-- [ ] Интегрировать JSON-карты в геймплей
 - [ ] Система подсчёта очков и рекордов
 - [ ] Увеличение скорости с ростом змейки
-- [ ] Загрузка случайной карты при старте
+- [ ] Выбор карты при старте (не только `default`)
 - [ ] Сохранение прогресса
 - [ ] Поддержка разных цветовых схем через `user.json`
 
@@ -491,6 +393,8 @@ def free(positions_dict):
 
 *Если вам понравился проект — поставьте звезду на GitHub! ⭐*
 
+[![Info Site](https://img.shields.io/badge/инфо_сайт-Snake--info-9cf?style=for-the-badge)](https://su57ks.github.io/Snake-info/)
+
 [⬆ Наверх](#-консольная-змейка--console-snake)
 
 </div>
@@ -509,7 +413,7 @@ git clone https://github.com/su57ks/Console-Snake.git
 # Go to the project folder
 cd Console-Snake
 
-# Install dependencies
+# Install the only dependency
 pip install keyboard
 
 # Run the game
@@ -518,15 +422,17 @@ python snake.py
 
 #### Requirements
 - Python 3.x
-- Libraries: `keyboard`, `codecs`, `json` (built-in)
+- Library: `keyboard` (only dependency)
 - Terminal with ANSI color support
 
 ---
 
 ### 📝 Project Description
-**Console Snake** is a classic Snake game implemented entirely in the terminal. The project features teleportation when leaving the field boundaries instead of standard walls, colored display, and support for user-created maps in JSON format.
+**Console Snake** is a classic Snake game implemented entirely in the terminal. The project features teleportation when leaving the field boundaries instead of standard walls, colored display, and full support for user-created maps in JSON format (maps are now fully integrated into gameplay!).
 
 The project is hand-written, without using artificial intelligence — just pure Python, minimal dependencies, and a human approach to every line of code.
+
+🔗 **[Game Info Site](https://su57ks.github.io/Snake-info/)** — more details and visuals
 
 ---
 
@@ -537,14 +443,16 @@ The project is hand-written, without using artificial intelligence — just pure
 | 🎮 **Gameplay** | WASD control | Intuitive hotkey control |
 | | Teleportation | Snake appears on the opposite side when leaving the field |
 | | Game timer | Displays current session time after each move |
-| 🎨 **Visual** | Colored graphics | Snake — red blocks (`██`), field — yellow (`░░`) |
-| | ANSI support | 24-bit colors in terminal |
+| | Map obstacles | Walls that kill the snake on collision |
+| 🎨 **Visual** | Colored graphics | Snake — red blocks (`██`), field — colors from map |
+| | ANSI support | 24-bit colors in terminal, each cell can have its own RGB color |
 | 🗺 **Maps** | JSON format | Easy level creation and editing |
+| | Full integration | Maps now affect gameplay (field colors and walls) |
 | | RGB colors | Each cell can have its own color |
-| | Obstacle system | Ability to create impassable walls |
+| | Obstacle system | Impassable walls (`empty: false`) |
 | ⚡ **Technical** | Multithreading | Separate thread for key waiting |
 | | Smart clearing | Adaptive screen clearing for different environments |
-| | Minimal dependencies | Only 1 third-party library |
+| | **Minimal dependencies** | Only **1** third-party library (`keyboard`) |
 
 ---
 
@@ -563,31 +471,32 @@ The project is hand-written, without using artificial intelligence — just pure
 1. The snake moves in the chosen direction
 2. When leaving the field, it appears on the opposite side (teleportation)
 3. Collision with own tail leads to death
-4. Game time is displayed after each move
+4. **Collision with a wall** (`"empty": false` cell) also leads to death
+5. Game time is displayed after each move
 
 ---
 
 ### 🗺 Map System
 
-#### JSON Format
+#### Main map file: `data.json`
+The game loads the map from `data.json` at startup. The format has been updated to use an object for fast cell access.
+
 ```json
 {
-  "name": "Example Map",
-  "description": "Map description",
-  "author": "Author Name",
-  "size": [3, 1],
-  "structure": [
-    {
-      "coords": [0, 0],
-      "empty": true,
-      "color": [240, 240, 240]
-    },
-    {
-      "coords": [1, 0],
-      "empty": false,
-      "color": [100, 100, 100]
+  "maps": {
+    "default": {
+      "name": "Default map",
+      "description": "обычная карта",
+      "author": "@su57ks",
+      "size": [15, 13],
+      "structure": {
+        "0:0": {"coords": [0, 0], "empty": true, "color": [255, 255, 0]},
+        "1:0": {"coords": [1, 0], "empty": true, "color": [255, 255, 0]},
+        ...
+        "14:12": {"coords": [14, 12], "empty": true, "color": [255, 255, 0]}
+      }
     }
-  ]
+  }
 }
 ```
 
@@ -598,12 +507,12 @@ The project is hand-written, without using artificial intelligence — just pure
 | `description` | string | Level description |
 | `author` | string | Map creator |
 | `size` | array | Dimensions [x, y] |
-| `structure` | array | Array of cells |
+| `structure` | object | Cell object with `"x:y"` keys |
 | `coords` | array | Coordinates [x, y] |
-| `empty` | bool | `true` — passable, `false` — wall |
-| `color` | array | RGB color [r, g, b] |
+| `empty` | bool | `true` — passable, `false` — wall (death) |
+| `color` | array | RGB color [r, g, b] for cell rendering |
 
-> **Note:** The map system is under development and not yet integrated into the main gameplay.
+> **Important:** Maps are now **fully integrated**! Field colors come from `data.json`, and walls (`empty: false`) kill the snake.
 
 ---
 
@@ -612,11 +521,10 @@ The project is hand-written, without using artificial intelligence — just pure
 #### ✅ Advantages
 | | |
 |---|------|
-| **✍️ Human-written** | **The most important thing** — the code is written manually, without using ChatGPT or other AI. Every line is thought through and written by hand |
-| **👨‍💻 Live code** | All code is written without ready-made templates or game engines — a human approach is evident |
-| **📦 Minimal dependencies** | Only 1 third-party library (`keyboard`). Everything else is pure Python |
-| **🎨 Colored interface** | Full-color terminal output with 24-bit RGB support |
-| **🧩 Extensibility** | Easy to add new maps via JSON |
+| **✍️ Human-written** | **The most important** — code is written manually, without ChatGPT or other AI. Every line is thought through and written by hand |
+| **📦 Minimal dependencies** | Only **1** third-party library (`keyboard`). Everything else is pure Python |
+| **🎨 Colored interface** | Full-color terminal output with 24-bit RGB support for each cell |
+| **🗺 Full map support** | Maps are fully integrated: affect colors and create walls |
 | **🔄 Teleportation** | Non-standard mechanic instead of boring walls |
 | **⚡ Multithreading** | Responsive controls thanks to separate thread for keys |
 | **🔄 Smart clearing** | Adapts to execution environment (console/IDE) |
@@ -629,7 +537,7 @@ The project is hand-written, without using artificial intelligence — just pure
 | **🍔 No food mechanic** | Food collection is not implemented yet — the snake has a fixed starting length |
 | **🚫 No score system** | No point tracking or high scores |
 | **🐌 No speed increase** | Movement speed is constant, doesn't increase |
-| **🗺 Maps not in game** | JSON maps exist but don't affect gameplay yet |
+| **📁 Single map** | Only `default` map loads, no selection yet |
 
 ---
 
@@ -638,12 +546,13 @@ The project is hand-written, without using artificial intelligence — just pure
 ```
 📦 Console-Snake
 ├── 📄 snake.py                          # Main game file
+├── 📄 data.json                         # Map file (now here)
 ├── 📄 user.json                         # User configuration
-├── 📁 maps/                              # Maps folder
-│   └── 📄 example.json                    # Example map
 ├── 📄 README.md                          # Documentation
 └── 📄 LICENSE                            # GPLv3 License
 ```
+
+> **Note:** The `maps/` folder is no longer used — all maps are stored in `data.json`.
 
 ---
 
@@ -652,7 +561,7 @@ The project is hand-written, without using artificial intelligence — just pure
 | Technology | Application |
 |------------|-------------|
 | **Python 3** | Main game logic |
-| **keyboard** | Global key press interception |
+| **keyboard** | Global key press interception (only dependency) |
 | **threading** | Asynchronous input waiting |
 | **ANSI escape codes** | Colored terminal output |
 | **JSON** | Map storage and configuration |
@@ -667,96 +576,27 @@ The project is hand-written, without using artificial intelligence — just pure
 | Function | Purpose | Parameters | Return Value |
 |---------|------------|-----------|----------------------|
 | `clear()` | Clears screen based on environment | None | `None` |
-| `w_move()`, `a_move()`, `s_move()`, `d_move()` | Wrapper functions to call `calculate()` with corresponding direction | None | `None` |
+| `w_move()`, `a_move()`, `s_move()`, `d_move()` | Wrapper functions to call `calculate()` | None | `None` |
 | `close()` | Exits the game with "Good luck!" message | None | `None` (terminates process) |
-| `lst2str(lst)` | Converts a list of strings into one string with line breaks | `lst`: list of strings | `string`: joined string |
-| `dict2str(dct)` | Converts a dictionary of strings into one string with line breaks | `dct`: dictionary with indices 0..n | `string`: joined string |
-| `draw(positions_dict)` | Draws the game field | `positions_dict`: dictionary with snake coordinates | `None` (prints to console) |
+| `lst2str(lst)` | Converts a list of strings into one string | `lst`: list of strings | `string`: joined string |
+| `dict2str(dct)` | Converts a dictionary of strings into one string | `dct`: dictionary with indices 0..n | `string`: joined string |
+| `draw(positions_dict)` | Draws the game field | `positions_dict`: snake coordinates | `None` (prints to console) |
 | `out(position)` | Handles boundary exit (teleportation) | `position`: list [x, y] | `position`: corrected coordinates |
-| `free(positions_dict)` | Finds free cells on the field | `positions_dict`: dictionary with snake coordinates | `free`: list of free cells |
-| `calculate(command)` | Main movement and logic function | `command`: string "w", "a", "s", "d" | `None` (updates global variables) |
+| `free(positions_dict)` | Finds free cells on the field | `positions_dict`: snake coordinates | `free`: list of free cells |
+| `calculate(command)` | Main movement and logic function | `command`: "w", "a", "s", "d" | `None` (updates global variables) |
 
-#### Detailed Analysis of Key Functions
+#### Key Functions Detailed
 
-**clear()** — adaptive screen clearing
+**Map loading at start**
 ```python
-def clear():
-    with codecs.open("user.json", "r", "utf_8_sig") as f:
-        user = json.load(f)
-        if user["enviroment"] == "console":
-            os.system('cls' if os.name == 'nt' else 'clear')
-        else:
-            print("\n" * 100)
+with codecs.open("data.json", "r", "utf_8_sig") as f:
+    map = json.load(f)["maps"]["default"]
 ```
-**What it does:**
-- Reads `user.json` with UTF-8 BOM support
-- Checks `enviroment` value
-- If `"console"` — uses system clear command
-- Otherwise — prints 100 empty lines
-
-**Features:**
-- Windows (`cls`) and Unix (`clear`) support
-- Adapts to different environments (console, IDE, online editors)
-- Uses `codecs` for proper BOM file reading
+Now the map is loaded from `data.json` once at startup and is globally available.
 
 ---
 
-**calculate(command)** — the heart of the game
-```python
-def calculate(command):
-    global positions
-    global hotkey_pressed
-    hotkey_pressed.set()                    # Signal key press
-    hotkey_pressed = threading.Event()      # Reset event
-    new_positions = {}
-    nums = sorted(positions.keys())          # [-1, 0, 1, 2, 3]
-    mx = max(nums)                           # 3 (head index)
-    
-    # Calculate new head position based on direction
-    if command == "w":
-        last = [positions[mx][0], positions[mx][1] - 1]
-    elif command == "d":
-        last = [positions[mx][0] + 1, positions[mx][1]]
-    elif command == "s":
-        last = [positions[mx][0], positions[mx][1] + 1]
-    elif command == "a":
-        last = [positions[mx][0] - 1, positions[mx][1]]
-
-    upgr_last = out(last)                    # Teleport if needed
-    new_positions[mx] = upgr_last            # New head
-
-    # Collision check and move other segments
-    for num in nums:
-        if positions[num] == upgr_last:      # If head collides with body
-            print("You died :(")
-            close()
-        if num == mx:
-            continue
-        new_positions[num] = positions[num + 1]  # Segment follows previous
-
-    clear()                                    # Clear screen
-    draw(new_positions)                         # Draw
-    print("Play time:", round(time() - play_time, 2), "seconds")
-    positions = new_positions                    # Update global variable
-```
-**What it does:**
-- Gets movement command
-- Calculates new head position
-- Applies teleportation via `out()`
-- Checks collision with body
-- Moves all segments
-- Clears screen via `clear()`
-- Redraws field
-- Updates timer
-
-**Features:**
-- Key `-1` in `positions` dictionary is a technical element for future mechanics
-- Snake stored as `{index: [x, y]}`, higher index = head
-- Teleportation applied only to head
-
----
-
-**draw(positions_dict)** — field rendering
+**draw(positions_dict)** — updated rendering
 ```python
 def draw(positions_dict):
     positions = positions_dict.values()
@@ -770,71 +610,68 @@ def draw(positions_dict):
                     line += "\033[38;2;255;0;0m██\033[m"  # Red snake
                     find = True
             if find is False:
-                line += "\033[38;2;255;255;0m░░\033[m"    # Yellow field
+                color = map["structure"][f"{x}:{y}"]["color"]  # Color from map!
+                line += f"\033[38;2;{color[0]};{color[1]};{color[2]}m░░\033[m"
         lines[y] = line
     print(dict2str(lines))
 ```
-**What it does:**
-- Iterates through all field cells
-- Checks if cell contains snake segment
-- If yes — draws red block
-- If no — draws yellow block
-- Formats output via `dict2str()`
-
-**Features:**
-- Double loop over Y and X
-- Uses ANSI codes for 24-bit color
-- Each call completely redraws the field
+**What's new:**
+- Field color now comes from `data.json` for each cell
+- Support for 24-bit RGB colors
 
 ---
 
-**out(position)** — teleportation
+**calculate(command)** — wall collision
 ```python
-def out(position):
-    if XSIZE > position[0] > -1 and YSIZE > position[1] > -1:
-        return position
-    if position[0] == -1:
-        position[0] = XSIZE - 1
-    elif position[0] == XSIZE:
-        position[0] = 0
-    if position[1] == -1:
-        position[1] = YSIZE - 1
-    elif position[1] == YSIZE:
-        position[1] = 0
-    return position
-```
-**What it does:**
-- Checks if point is within field boundaries
-- If left edge — appears on right
-- If right edge — appears on left
-- If top edge — appears on bottom
-- If bottom edge — appears on top
+def calculate(command):
+    # ... calculate new position ...
+    upgr_last = out(last)
+    new_positions[mx] = upgr_last
 
-**Features:**
-- Creates "torus" effect (field is looped)
-- Applied only to snake's head
+    for num in nums:
+        # Collision with body OR with wall!
+        if positions[num] == upgr_last or map["structure"][f"{upgr_last[0]}:{upgr_last[1]}"]["empty"] == False:
+            print("You died :(")
+            close()
+        if num == mx:
+            continue
+        new_positions[num] = positions[num + 1]
+    # ...
+```
+**What's new:**
+- Added wall collision check (`"empty": false`)
+- Death upon hitting such a cell
 
 ---
 
-**free(positions_dict)** — find free cells
-```python
-def free(positions_dict):
-    positions = list(positions_dict.values())
-    free = []
-    for y in range(YSIZE):
-        for x in range(XSIZE):
-            if [x, y] not in positions:
-                free.append([x, y])
-    return free
-```
-**What it does:**
-- Gets all occupied cells
-- Iterates through entire field
-- If cell is free — adds to free list
+### 🗺 data.json Format
 
-**Features:**
-- Prepared for future food mechanics
-- Removed unnecessary `print(positions)`
+The game now uses a single `data.json` file to store the map:
+
+```json
+{
+  "maps": {
+    "default": {
+      "name": "Default map",
+      "description": "обычная карта",
+      "author": "@su57ks",
+      "size": [15, 13],
+      "structure": {
+        "0:0": {"coords": [0, 0], "empty": true, "color": [255, 255, 0]},
+        "0:1": {"coords": [0, 1], "empty": true, "color": [255, 255, 0]},
+        ...
+      }
+    }
+  }
+}
+```
+
+**How to create your own map:**
+1. Copy the `default` structure
+2. Change `name`, `description`, `author`
+3. Set desired RGB colors for each cell
+4. Set `"empty": false` for wall cells
+5. Save to `data.json`
 
 ---
 
@@ -846,51 +683,18 @@ def free(positions_dict):
 
 | Field | Value | Description |
 |-------|-------|-------------|
-| `enviroment` | `"console"` | For system screen clearing |
-| | `"special"` | For clearing via 100 empty lines |
-
-**How it works:**
-- `"console"` — uses `os.system('cls'/'clear')` (for real terminal)
-- `"special"` — uses `print("\n" * 100)` (for IDEs and online environments)
-
----
-
-### 🗺 How to Add a Map
-
-1. Create a JSON file in the `/maps` folder
-2. Fill in the structure following `example.json`:
-
-```json
-{
-  "name": "Map name",
-  "description": "Description",
-  "author": "Your name",
-  "size": [width, height],
-  "structure": [
-    {
-      "coords": [x, y],
-      "empty": true/false,
-      "color": [r, g, b]
-    }
-  ]
-}
-```
-
-3. Coordinates must be within `size` limits
-4. `empty: false` creates an impassable wall
-5. Color is set in RGB format (0-255)
-
-> **Important:** Map integration into the game is under development
+| `enviroment` | `"console"` | For system screen clearing (`cls`/`clear`) |
+| | `"special"` | For clearing via 100 empty lines (for IDEs) |
 
 ---
 
 ### 🚀 Development Plans
 
+- [x] **Full JSON map integration** (colors and walls)
 - [ ] Add food mechanic and snake growth
-- [ ] Integrate JSON maps into gameplay
 - [ ] Score system and high scores
 - [ ] Speed increase as snake grows
-- [ ] Load random map on start
+- [ ] Map selection at startup (not just `default`)
 - [ ] Progress saving
 - [ ] Support for different color schemes via `user.json`
 
@@ -913,6 +717,8 @@ Full license text is available in the [LICENSE](LICENSE) file.
 **Made with soul for true fans of the classics** 💗
 
 *If you like the project — give it a star on GitHub! ⭐*
+
+[![Info Site](https://img.shields.io/badge/info_site-Snake--info-9cf?style=for-the-badge)](https://su57ks.github.io/Snake-info/)
 
 [⬆ Back to top](#-консольная-змейка--console-snake)
 
