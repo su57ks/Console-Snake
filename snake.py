@@ -36,6 +36,7 @@ def d_move():
 
 def close():
     print("Good luck!")
+    keyboard.unhook_all()
     os._exit(0)
 
 def lst2str(lst):
