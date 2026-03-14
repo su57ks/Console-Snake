@@ -11,6 +11,9 @@ YSIZE = 13
 
 play_time = time()
 
+with codecs.open("default.json", "r", "utf_8_sig") as f:
+    map = json.load(f)
+
 def clear():
     with codecs.open("user.json", "r", "utf_8_sig") as f:
         user = json.load(f)
@@ -61,7 +64,8 @@ def draw(positions_dict):
                     line += "\033[38;2;255;0;0m██\033[m"
                     find = True
             if find is False:
-                line += "\033[38;2;255;255;0m░░\033[m"
+                color = map["structure"][f"{x}:{y}"]["color"]
+                line += f"\033[38;2;{color[0]};{color[1]};{color[2]}m░░\033[m"
         
         lines[y] = line
 
