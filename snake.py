@@ -70,7 +70,8 @@ def draw(positions_dict):
         for x in range(XSIZE):
             find = False
             for position in positions:
-                if position == [x, y]:
+                key = keyByValue(positions_dict, position)
+                if position == [x, y] and key != -1:
                     line += "\033[38;2;255;0;0m██\033[m"
                     find = True
             if find is False:
