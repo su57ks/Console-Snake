@@ -131,18 +131,32 @@ def calculate(command):
         last = [positions[mx][0] - 1, positions[mx][1]]
 
     upgr_last = out(last)
+
+    if map["structure"][f"{upgr_last[0]}:{upgr_last[1]}"]["empty"] == False:
+            print("You died :(")
+            close()
+
+    for num in nums:
+        if positions[num] == upgr_last:
+            print("You died :(")
+            close()
+
     if upgr_last == apple:
         score += 1
         apple = []
-    new_positions[mx] = upgr_last
+        new_positions[mx + 1] = upgr_last
+        for num in nums:
+            if num == mx:
+                continue
+            new_positions[num + 1] = positions[num + 1]
+        new_positions[-1] = positions[-1]
+    else:
+        new_positions[mx] = upgr_last
 
-    for num in nums:
-        if positions[num] == upgr_last or map["structure"][f"{upgr_last[0]}:{upgr_last[1]}"]["empty"] == False:
-            print("You died :(")
-            close()
-        if num == mx:
-            continue
-        new_positions[num] = positions[num + 1]
+        for num in nums:
+            if num == mx:
+                continue
+            new_positions[num] = positions[num + 1]
 
     clear()
     if apple == []:
