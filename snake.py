@@ -6,13 +6,15 @@ import os
 import codecs
 import json
 
-XSIZE = 15
-YSIZE = 13
-
-play_time = time()
-
 with codecs.open("data.json", "r", "utf_8_sig") as f:
     map = json.load(f)["maps"]["default"]
+
+XSIZE = map["size"][0]
+YSIZE = map["size"][1]
+
+apple = []
+
+play_time = time()
 
 def clear():
     with codecs.open("user.json", "r", "utf_8_sig") as f:
@@ -21,6 +23,11 @@ def clear():
             os.system('cls' if os.name == 'nt' else 'clear')
         else:
             print("\n" * 100)
+
+def keyByValue(dct, value):
+    for key in dct.keys():
+        if dct[key] == value:
+            return key
 
 def w_move():
     calculate("w")
@@ -61,12 +68,16 @@ def draw(positions_dict):
         for x in range(XSIZE):
             find = False
             for position in positions:
-                if position[0] == x and position[1] == y:
+                if position == [x, y]:
                     line += "\033[38;2;255;0;0m██\033[m"
                     find = True
             if find is False:
-                color = map["structure"][f"{x}:{y}"]["color"]
-                line += f"\033[38;2;{color[0]};{color[1]};{color[2]}m░░\033[m"
+                global apple
+                if [x, y] == apple:
+                    line += "\033[38;2;0;255;0m██\033[m"
+                else:
+                    color = map["structure"][f"{x}:{y}"]["color"]
+                    line += f"\033[38;2;{color[0]};{color[1]};{color[2]}m░░\033[m"
         
         lines[y] = line
 
@@ -87,12 +98,13 @@ def out(position):
 
     return position
 
-def free(positions_dict):
+def free(positions_dict, head):
     positions = list(positions_dict.values())
     free = []
+    near = [out([head[0] + 1, head[1]]), out([head[0] - 1, head[1]]), out([head[0], head[1] + 1]), out([head[0], head[1] - 1]), ]
     for y in range(YSIZE):
         for x in range(XSIZE):
-            if [x, y] not in positions:
+            if [x, y] not in positions and map["structure"][f"{x}:{y}"]["empty"] == True and [x, y] not in near:
                 free.append([x, y])
     return free
 
@@ -125,7 +137,10 @@ def calculate(command):
         new_positions[num] = positions[num + 1]
 
     clear()
-        
+    global apple
+    if apple == []:
+        free_ = free(new_positions, upgr_last)
+        apple = choice(free_)
     draw(new_positions)
     global play_time
     print("Play time:", round(time() - play_time, 2), "seconds")
