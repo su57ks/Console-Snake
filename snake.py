@@ -14,6 +14,8 @@ YSIZE = map["size"][1]
 
 apple = []
 
+score = 0
+
 play_time = time()
 
 def clear():
@@ -111,6 +113,8 @@ def free(positions_dict, head):
 def calculate(command):
     global positions
     global hotkey_pressed
+    global score
+    global apple
     hotkey_pressed.set()
     hotkey_pressed = threading.Event()
     new_positions = {}
@@ -126,6 +130,9 @@ def calculate(command):
         last = [positions[mx][0] - 1, positions[mx][1]]
 
     upgr_last = out(last)
+    if upgr_last == apple:
+        score += 1
+        apple = []
     new_positions[mx] = upgr_last
 
     for num in nums:
@@ -137,13 +144,13 @@ def calculate(command):
         new_positions[num] = positions[num + 1]
 
     clear()
-    global apple
     if apple == []:
         free_ = free(new_positions, upgr_last)
         apple = choice(free_)
     draw(new_positions)
     global play_time
     print("Play time:", round(time() - play_time, 2), "seconds")
+    print("Score:", score)
     positions = new_positions
 
 positions = {-1: [1, 6], 0: [2, 6], 1:[3, 6], 2: [4, 6], 3: [5, 6]}
