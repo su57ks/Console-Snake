@@ -6,177 +6,178 @@ import os
 import codecs
 import json
 
-with codecs.open("data.json", "r", "utf_8_sig") as f:
-    map = json.load(f)["maps"]["default"]
+class Snake():
+    def __init__(self, pName = "User"):
+        with codecs.open("data.json", "r", "utf_8_sig") as f:
+            self.map = json.load(f)["maps"]["default"]
+        self.name = pName
+        self.apple = []
+        self.score = 0
+        self.binded = {}
+        self.XSIZE = self.map["size"][0]
+        self.YSIZE = self.map["size"][1]
+        self.play_time = time()
+        self.start = self.map["start"]
+        self.positions = {}
+        self.hotkey_pressed = threading.Event()
+        self.running = True
+        for key in self.start:
+            self.positions[int(key)] = self.start[key]
+        keyboard.add_hotkey('w', self.w_move)
+        keyboard.add_hotkey('a', self.a_move)
+        keyboard.add_hotkey('s', self.s_move)
+        keyboard.add_hotkey('d', self.d_move)
+        keyboard.add_hotkey('ctrl+c', self.close)
 
-XSIZE = map["size"][0]
-YSIZE = map["size"][1]
+    def run(self):
+        self.draw()
+        while self.running:
+            self.hotkey_pressed.wait()
 
-apple = []
+    def clear(self):
+        with codecs.open("user.json", "r", "utf_8_sig") as f:
+            user = json.load(f)
+            if user["environment"] == "console":
+                os.system('cls' if os.name == 'nt' else 'clear')
+            else:
+                print("\n" * 100)
 
-score = 0
+    def keyByValue(self, dct, value):
+        for key in dct.keys():
+            if dct[key] == value:
+                return key
 
-play_time = time()
+    def w_move(self):
+        self.calculate("w")
 
-def clear():
-    with codecs.open("user.json", "r", "utf_8_sig") as f:
-        user = json.load(f)
-        if user["enviroment"] == "console":
-            os.system('cls' if os.name == 'nt' else 'clear')
-        else:
-            print("\n" * 100)
+    def a_move(self):
+        self.calculate("a")
 
-def keyByValue(dct, value):
-    for key in dct.keys():
-        if dct[key] == value:
-            return key
+    def s_move(self):
+        self.calculate("s")
 
-def w_move():
-    calculate("w")
+    def d_move(self):
+        self.calculate("d")
 
-def a_move():
-    calculate("a")
+    def close(self):
+        print("Good luck!")
+        keyboard.unhook_all()
+        os._exit(0)
 
-def s_move():
-    calculate("s")
+    def lst2str(self, lst):
+        string = ""
+        for elem in lst:
+            string = string + elem + "\n"
 
-def d_move():
-    calculate("d")
+        return string[:-1]
 
-def close():
-    print("Good luck!")
-    keyboard.unhook_all()
-    os._exit(0)
+    def dict2str(self, dct):
+        string = ""
+        for i in range(len(dct.keys())):
+            string = string + dct[i] + "\n"
 
-def lst2str(lst):
-    string = ""
-    for elem in lst:
-        string = string + elem + "\n"
+        return string[:-1]
 
-    return string[:-1]
+    def draw(self):
+        print(self.positions)
+        positions = self.positions.values()
+        lines = {}
+        for y in range(self.YSIZE):
+            line = ""
+            for x in range(self.XSIZE):
+                find = False
+                for position in positions:
+                    key = self.keyByValue(self.positions, position)
+                    if position == [x, y] and key != -1:
+                        line += "\033[38;2;255;0;0m██\033[m"
+                        find = True
+                if find is False:
+                    if [x, y] == self.apple:
+                        line += "\033[38;2;0;255;0m██\033[m"
+                    else:
+                        color = self.map["structure"][f"{x}:{y}"]["color"]
+                        line += f"\033[38;2;{color[0]};{color[1]};{color[2]}m░░\033[m"
+            
+            lines[y] = line
 
-def dict2str(dct):
-    string = ""
-    for i in range(len(dct.keys())):
-        string = string + dct[i] + "\n"
+        print(self.dict2str(lines))
 
-    return string[:-1]
+    def out(self, position):
+        if self.XSIZE > position[0] > -1 and self.YSIZE > position[1] > -1:
+            return position
+        if position[0] == -1:
+            position[0] = self.XSIZE - 1
+        elif position[0] == self.XSIZE:
+            position[0] = 0
 
-def draw(positions_dict):
-    positions = positions_dict.values()
-    lines = {}
-    for y in range(YSIZE):
-        line = ""
-        for x in range(XSIZE):
-            find = False
-            for position in positions:
-                key = keyByValue(positions_dict, position)
-                if position == [x, y] and key != -1:
-                    line += "\033[38;2;255;0;0m██\033[m"
-                    find = True
-            if find is False:
-                global apple
-                if [x, y] == apple:
-                    line += "\033[38;2;0;255;0m██\033[m"
-                else:
-                    color = map["structure"][f"{x}:{y}"]["color"]
-                    line += f"\033[38;2;{color[0]};{color[1]};{color[2]}m░░\033[m"
-        
-        lines[y] = line
+        if position[1] == -1:
+            position[1] = self.YSIZE - 1
+        elif position[1] == self.YSIZE:
+            position[1] = 0
 
-    print(dict2str(lines))
-
-def out(position):
-    if XSIZE > position[0] > -1 and YSIZE > position[1] > -1:
         return position
-    if position[0] == -1:
-        position[0] = XSIZE - 1
-    elif position[0] == XSIZE:
-        position[0] = 0
 
-    if position[1] == -1:
-        position[1] = YSIZE - 1
-    elif position[1] == YSIZE:
-        position[1] = 0
+    def free(self, head):
+        positions = list(self.positions.values())
+        free = []
+        near = [self.out([head[0] + 1, head[1]]), self.out([head[0] - 1, head[1]]), self.out([head[0], head[1] + 1]), self.out([head[0], head[1] - 1]), ]
+        for y in range(self.YSIZE):
+            for x in range(self.XSIZE):
+                if [x, y] not in positions and self.map["structure"][f"{x}:{y}"]["empty"] == True and [x, y] not in near:
+                    free.append([x, y])
+        return free
 
-    return position
+    def calculate(self, command):
+        self.hotkey_pressed.set()
+        new_positions = {}
+        nums = sorted(self.positions.keys())
+        mx = max(nums)
+        if command == "w":
+            last = [self.positions[mx][0], self.positions[mx][1] - 1]
+        elif command == "d":
+            last = [self.positions[mx][0] + 1, self.positions[mx][1]]
+        elif command == "s":
+            last = [self.positions[mx][0], self.positions[mx][1] + 1]
+        elif command == "a":
+            last = [self.positions[mx][0] - 1, self.positions[mx][1]]
 
-def free(positions_dict, head):
-    positions = list(positions_dict.values())
-    free = []
-    near = [out([head[0] + 1, head[1]]), out([head[0] - 1, head[1]]), out([head[0], head[1] + 1]), out([head[0], head[1] - 1]), ]
-    for y in range(YSIZE):
-        for x in range(XSIZE):
-            if [x, y] not in positions and map["structure"][f"{x}:{y}"]["empty"] == True and [x, y] not in near:
-                free.append([x, y])
-    return free
+        upgr_last = self.out(last)
 
-def calculate(command):
-    global positions
-    global hotkey_pressed
-    global score
-    global apple
-    hotkey_pressed.set()
-    hotkey_pressed = threading.Event()
-    new_positions = {}
-    nums = sorted(positions.keys())
-    mx = max(nums)
-    if command == "w":
-        last = [positions[mx][0], positions[mx][1] - 1]
-    elif command == "d":
-        last = [positions[mx][0] + 1, positions[mx][1]]
-    elif command == "s":
-        last = [positions[mx][0], positions[mx][1] + 1]
-    elif command == "a":
-        last = [positions[mx][0] - 1, positions[mx][1]]
-
-    upgr_last = out(last)
-
-    if map["structure"][f"{upgr_last[0]}:{upgr_last[1]}"]["empty"] == False:
-            print("You died :(")
-            close()
-
-    for num in nums:
-        if positions[num] == upgr_last:
-            print("You died :(")
-            close()
-
-    if upgr_last == apple:
-        score += 1
-        apple = []
-        new_positions[mx + 1] = upgr_last
-        for num in nums:
-            if num == mx:
-                continue
-            new_positions[num + 1] = positions[num + 1]
-        new_positions[-1] = positions[-1]
-    else:
-        new_positions[mx] = upgr_last
+        if self.map["structure"][f"{upgr_last[0]}:{upgr_last[1]}"]["empty"] == False:
+                print("You died :(")
+                self.close()
 
         for num in nums:
-            if num == mx:
-                continue
-            new_positions[num] = positions[num + 1]
+            if self.positions[num] == upgr_last:
+                print("You died :(")
+                self.close()
 
-    clear()
-    if apple == []:
-        free_ = free(new_positions, upgr_last)
-        apple = choice(free_)
-    draw(new_positions)
-    global play_time
-    print("Play time:", round(time() - play_time, 2), "seconds")
-    print("Score:", score)
-    positions = new_positions
+        if upgr_last == self.apple:
+            self.score += 1
+            self.apple = []
+            new_positions[mx + 1] = upgr_last
+            for num in nums:
+                if num == mx:
+                    continue
+                new_positions[num + 1] = self.positions[num + 1]
+            new_positions[-1] = self.positions[-1]
+        else:
+            new_positions[mx] = upgr_last
 
-positions = {-1: [1, 6], 0: [2, 6], 1:[3, 6], 2: [4, 6], 3: [5, 6]}
+            for num in nums:
+                if num == mx:
+                    continue
+                new_positions[num] = self.positions[num + 1]
 
-keyboard.add_hotkey('w', w_move)
-keyboard.add_hotkey('a', a_move)
-keyboard.add_hotkey('s', s_move)
-keyboard.add_hotkey('d', d_move)
-keyboard.add_hotkey('ctrl+c', close)
+        self.clear()
+        if self.apple == []:
+            free_ = self.free(upgr_last)
+            self.apple = choice(free_)
+        self.draw()
+        global play_time
+        print("Play time:", round(time() - self.play_time, 2), "seconds")
+        print("Score:", self.score)
+        self.positions = new_positions
 
-while True:
-    hotkey_pressed = threading.Event()
-
-    hotkey_pressed.wait()
+snake = Snake()
+snake.run()
