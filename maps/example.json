@@ -3,7 +3,7 @@
   "description": "Hado №90: Kuroshtsugi!",
   "author": "Aizen Sosuke",
   "size": [3, 1],
-  "start": ["-1": [0, 0], "0": [1, 0],
+  "start": ["-1": [0, 0], "0": [1, 0]],
   "structure": {
     "0:0": {"empty": true, "color": [240, 240, 240]},
     "1:0": {"empty": false, "color": [100, 100, 100]},
